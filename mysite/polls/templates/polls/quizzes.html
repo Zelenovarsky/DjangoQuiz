@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quizzes</title>
+</head>
+<body>
+
+<ul>
+    {% for quiz in quiz_list %}
+    <li><a href="{% %}/">{{ quiz.quiz_name }}</a></li>
+        <li><a href="/polls/{{ quiz.id }}/">{{ quiz.quiz_name }}</a></li>
+
+    {% endfor %}
+</ul>
+<p>NOTHING TO SHOW</p>
+
+
+</body>
+</html>

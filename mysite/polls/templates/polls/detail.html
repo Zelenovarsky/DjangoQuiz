@@ -1,0 +1,72 @@
+{% extends 'polls/base.html' %}
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<body>
+<h1>{{ quiz.quiz_text }}</h1>
+<form id="sendquiz" action=""  enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for question in quiz.question_set.all%}
+    <div id={{question.id}}> {{question.question_text}} :</div>
+
+    {% for answer in question.answer_set.all %}
+
+
+    <input type="{{question.question_type}}" name="question{{question.id}}" value="{{answer.choice_text}}">
+    {{answer.choice_text}} <br>
+    {%endfor%}
+    <p3 id="question{{question.id}}" hidden> this is hidden paragraph</p3>
+    {%endfor%}
+    <marquee behavior="alternate" direction="right"><input type="submit"
+                                                           value="submit_it_man {{user.username}} and {{user.id}}">
+    </marquee>
+</form>
+<script type="text/javascript">
+$.ajaxSetup({
+     beforeSend: function(xhr, settings) {
+         function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie && document.cookie != '') {
+                 var cookies = document.cookie.split(';');
+                 for (var i = 0; i < cookies.length; i++) {
+                     var cookie = jQuery.trim(cookies[i]);
+                     // Does this cookie string begin with the name we want?
+                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                     }
+                 }
+             }
+             return cookieValue;
+         }
+         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+             // Only send the token to relative URLs i.e. locally.
+             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+         }
+     }
+});
+
+$( "form" ).on( "submit", function( event ) {
+  event.preventDefault();
+   var data1 = $(this).serialize()
+   var data2 = data1.substr(data1.indexOf('question'),)
+    console.log(data2)
+  $.ajax({
+  type: 'POST',
+  url: 'quiz/results',
+  data: {
+  quiz_id : '{{quiz.id}}',
+  user_id: '{{user.id}}',
+  answers: $( this ).serialize(),
+  },
+  success:function(){
+
+    }
+  });
+
+});
+
+</script>
+</body>
+{% endblock content %}
+

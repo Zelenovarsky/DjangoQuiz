@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> regForm</title>
+</head>
+<body>
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% include 'polls/form_template.html' %}
+    <button type="submit"> Submit </button>
+
+</form>
+</body>
+</html>

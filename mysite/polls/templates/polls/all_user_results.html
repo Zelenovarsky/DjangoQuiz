@@ -1,0 +1,9 @@
+{% extends 'polls/base.html' %}
+{% block content %}
+<h1>OG MY GOSH</h1>
+{%for user_result in user_results%}
+<div>for quiz {{user_result.quiz.quiz_name}} you took {{user_result.submission_date}}</div>
+<div>your score: {{user_result.score}}</div>
+{%endfor%}
+{% endblock content %}
+
