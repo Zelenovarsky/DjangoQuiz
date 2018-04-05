@@ -1,0 +1,17 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+<form role="form" class="form-horizontal" method="post" action="{% url 'login' %}">{% csrf_token %}
+    <div class="form-group">
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}" class="bmd-label-floating">{{ field.html_name }}</label>
+                <input class="form-control" id="{{ field.id_for_label }}" maxlength="30" name="{{ field.html_name }}" value="" type="{{ field.html_name }}" />
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+        <input type="submit" class="btn btn-primary" value="login" />
+        <input type="hidden" name="next" value="{{ next }}" />
+    </div>
+</form>
+{% endblock content %}

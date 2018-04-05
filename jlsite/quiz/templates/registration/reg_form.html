@@ -1,0 +1,16 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}
+<div>
+    <span> {{field.errors }} </span>
+    <label> {{ field.label_tag }}</label>
+    <div> {{ field }}</div>
+</div>
+{% endfor %}
+    <button type="submit"> Submit </button>
+
+</form>
+{% endblock content %}

@@ -1,0 +1,91 @@
+{% extends 'quiz/base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="form-group col-sm-6">
+        <h1>{{ quiz.quiz_name }}</h1>
+        <hr>
+
+        <form id="sendquiz" action="" enctype="multipart/form-data" data-toggle="validator" role="form">
+            {% csrf_token %}
+
+            {% for question in quiz.question_set.all%}
+            <div class="panel-body" id={{question.id}}> {{question.question_text}} :</div>
+             <div class="form-group col-sm-6">
+            {% for answer in question.answer_set.all %}
+            {% if question.question_type != 'text'%}
+
+                <div class="{{question.question_type}}">
+                    <label>
+                        <input type="{{question.question_type}}" name="question{{question.id}}"
+                               value="{{answer.choice_text}}" required="true">
+                        {{answer.choice_text}}
+                    </label>
+                </div>
+                {%else%}
+                <div class="form-group">
+                    <input type="text" class="form-control" name="question{{question.id}}" required="true">
+                    <span class="bmd-help">input answer here.</span>
+                </div>
+                {% endif%}
+
+            {%endfor%}
+                  </div>
+            <p3 id="question{{question.id}}" hidden> this is hidden paragraph</p3>
+            {%endfor%}
+                <button type="submit" class="btn btn-outline-success">SUBMIT THAT STUFF MAAAN</button>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+$.ajaxSetup({
+     beforeSend: function(xhr, settings) {
+         function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie && document.cookie != '') {
+                 var cookies = document.cookie.split(';');
+                 for (var i = 0; i < cookies.length; i++) {
+                     var cookie = jQuery.trim(cookies[i]);
+                     // Does this cookie string begin with the name we want?
+                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                     }
+                 }
+             }
+             return cookieValue;
+         }
+         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+             // Only send the token to relative URLs i.e. locally.
+             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+         }
+     }
+});
+
+$( "form" ).on( "submit", function( event ) {
+  event.preventDefault();
+   var data1 = $(this).serialize()
+   var data2 = data1.substr(data1.indexOf('question'),)
+    console.log(data2)
+  $.ajax({
+  type: 'POST',
+  url: 'quiz/results',
+  data: {
+  quiz_id : '{{quiz.id}}',
+  user_id: '{{user.id}}',
+  answers: data2,
+  },
+  success:function(response){
+    console.log(response);
+
+    }
+  });
+
+});
+
+
+
+
+
+</script>
+{% endblock content %}
+
